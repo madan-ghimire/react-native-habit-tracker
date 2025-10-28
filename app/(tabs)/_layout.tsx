@@ -90,6 +90,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          headerTitleAlign: "center",
           title: "Today's Habits",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -103,6 +104,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="streaks"
         options={{
+          headerTitleAlign: "center",
           title: "Streaks",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -116,6 +118,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="add-habit"
         options={{
+          headerTitleAlign: "center",
           title: "Add Habit",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons

@@ -6,12 +6,15 @@ import {
   useHabits,
   useTodayCompletions,
 } from "@/lib/queries";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Button, Text } from "react-native-paper";
+import { Button, Dialog, Portal, Text } from "react-native-paper";
 
 export default function Index() {
   const { signOut, user } = useAuth();
+
+  const [confirmVisible, setConfirmVisible] = useState(false);
 
   const { data: habits = [] } = useHabits(user?.$id ?? "");
   const { data: completions = [] } = useTodayCompletions(user?.$id ?? "");
@@ -44,17 +47,46 @@ export default function Index() {
     }
   };
 
+  console.log("check dialog visible", confirmVisible);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text variant="headlineSmall" style={styles.title}>
           Today&#39;s Habits
         </Text>
-        <Button mode="text" onPress={signOut} icon={"logout"}>
+        {user && <Text style={styles.title}>Welcome, {user?.name}</Text>}
+        <Button
+          mode="text"
+          onPress={() => setConfirmVisible(true)}
+          icon={"logout"}
+        >
           Sign Out
         </Button>
       </View>
 
+      <Portal>
+        <Dialog
+          visible={confirmVisible}
+          onDismiss={() => setConfirmVisible(false)}
+        >
+          <Dialog.Title>Confirm Sign Out</Dialog.Title>
+          <Dialog.Content>
+            <Text>Are you sure you want to sign out?</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setConfirmVisible(false)}>No</Button>
+            <Button
+              onPress={() => {
+                setConfirmVisible(false);
+                signOut();
+              }}
+            >
+              Yes
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
       <ScrollView showsVerticalScrollIndicator={false}>
         <HabitsList
           habits={habits}
